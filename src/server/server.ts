@@ -1,5 +1,5 @@
 import express from 'express';
-import shoppingController from './controllers/shopping/shopping.controller';
+import shoppingController from './shopping.controller';
 
 const server = express();
 
