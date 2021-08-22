@@ -63,7 +63,7 @@ const signIn = async (page: puppeteer.Page): Promise<puppeteer.Page> => {
 }
 
 const init = async (): Promise<[puppeteer.Browser, puppeteer.Page]> => {
-    const isProd = process.env.environment === 'prod';
+    const isProd = process.env.ENVIRONMENT === 'prod';
     const options: puppeteer.LaunchOptions & puppeteer.BrowserLaunchArgumentOptions & puppeteer.BrowserConnectOptions = {
         headless: isProd,
         defaultViewport: { height: 1000, width: 1680 }
