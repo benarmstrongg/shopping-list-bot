@@ -7,7 +7,7 @@ controller.use(json());
 
 controller.post('/shopping/add-item', (req, res) => {
     console.log(req.body);
-    res.end();
+    res.send(req.body);
 });
 
 export default controller;
