@@ -1,34 +1,36 @@
-import * as puppeteer from 'puppeteer';
+import puppeteer from 'puppeteer';
 
 export const addItem = async (itemName: string) => {
     const [browser, page] = await init();
+    try {
+        await signIn(page);
 
-    await signIn(page);
-
-    const resultElement = await search(page, itemName);
-    if (resultElement) {
-        const addToListButton = await resultElement.$('.shopping-list-menu_container button');
-        const actionLabel = await addToListButton.evaluate(n => n.getAttribute('aria-label'));
-        if (actionLabel.includes('remove')) {
-            console.log(`Item ${itemName} is already in cart`);
+        const resultElement = await search(page, itemName);
+        if (resultElement) {
+            const addToListButton = await resultElement.$('.shopping-list-menu_container button');
+            const actionLabel = await addToListButton.evaluate(n => n.getAttribute('aria-label'));
+            if (actionLabel.includes('remove')) {
+                console.log(`Item ${itemName} is already in cart`);
+            }
+            else {
+                await addToListButton.click();
+                console.log(`Item ${itemName} added to cart`)
+            }
         }
         else {
-            await addToListButton.click();
-            console.log(`Item ${itemName} added to cart`)
+            console.log(`Could not find item ${itemName}`);
         }
     }
-    else {
-        console.log(`Could not find item ${itemName}`);
+    finally {
+        await browser.close();
     }
-
-    await browser.close();
 }
 
 
 
 const search = async (page: puppeteer.Page, query: string): Promise<puppeteer.ElementHandle<Element> | null> => {
     const searchInput = await page.waitForSelector('#typeahead-search-input');
-    await searchInput.type(query);
+    await typeWithDelay(page, searchInput, query);
 
     const searchButton = await page.$('.search-button');
     await searchButton.click();
