@@ -73,6 +73,9 @@ const init = async (): Promise<[puppeteer.Browser, puppeteer.Page]> => {
     if (!isProd) {
         options.executablePath = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
     }
+    else {
+        options.args = ['--no-sandbox']
+    }
 
     const browser = await puppeteer.launch(options);
     const page = await browser.newPage();
